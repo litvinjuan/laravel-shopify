@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Tests;
+namespace litvinjuan\LaravelShopify\Tests;
 
 class ExampleTest extends TestCase
 {

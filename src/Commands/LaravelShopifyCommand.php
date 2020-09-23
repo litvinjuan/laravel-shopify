@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Skeleton\Commands;
+namespace litvinjuan\LaravelShopify\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelShopifyCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-shopify';
 
     public $description = 'My command';
 

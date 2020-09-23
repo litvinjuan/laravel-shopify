@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_name/:package_name",
-    "description": ":package_description",
+    "name": "litvinjuan/laravel-shopify",
+    "description": "Connect your Laravel application to the Shopify API",
     "keywords": [
-        ":vendor_name",
-        ":package_name"
+        "litvinjuan",
+        "laravel-shopify"
     ],
-    "homepage": "https://github.com/:vendor_name/:package_name",
+    "homepage": "https://github.com/litvinjuan/laravel-shopify",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
-            "homepage": "https://spatie.be",
+            "name": "Juan Litvin",
+            "email": "litvinjuan@gmail.com",
+            "homepage": "https://juanlitvin.com",
             "role": "Developer"
         }
     ],
@@ -27,13 +27,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src",
-            "Spatie\\Skeleton\\Database\\Factories\\": "database/factories"
+            "litvinjuan\\LaravelShopify\\": "src",
+            "litvinjuan\\LaravelShopify\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "litvinjuan\\LaravelShopify\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -48,10 +48,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Skeleton\\SkeletonServiceProvider"
+                "litvinjuan\\LaravelShopify\\LaravelShopifyServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "Spatie\\Skeleton\\SkeletonFacade"
+                "LaravelShopify": "litvinjuan\\LaravelShopify\\LaravelShopifyFacade"
             }
         }
     },

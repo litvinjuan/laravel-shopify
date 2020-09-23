@@ -33,7 +33,7 @@ class ShopifyGuard implements Guard
 
         if ($shop = $this->getShop()) {
             Shopify::setShop($shop);
-            $this->user = Shopify::getShop()->user;
+            $this->user = Shopify::getShop()->getUser();
         }
 
         return $this->user;
@@ -51,12 +51,17 @@ class ShopifyGuard implements Guard
 
     private function getShop()
     {
-        $shopQuery = config('laravel-shopify.shop-model')::query()->domain($this->request->get('shop'));
+        $shopQuery = $this->getShopClass()::query()->domain($this->request->get('shop'));
 
         if (request()->routeIs('shopify.callback')) {
             $shopQuery->withoutGlobalScope(ConnectedShopScope::class);
         }
 
         return $shopQuery->first();
+    }
+
+    private function getShopClass()
+    {
+        return config('laravel-shopify.shop-model');
     }
 }

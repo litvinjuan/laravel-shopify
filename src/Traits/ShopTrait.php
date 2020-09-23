@@ -58,4 +58,29 @@ trait ShopTrait
                 'X-Shopify-Access-Token' => $this->access_token,
             ]);
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getUser(): Authenticatable
+    {
+        return $this->user;
+    }
+
+    public function getDomain(): string
+    {
+        return $this->domain;
+    }
+
+    public function getNonce(): string
+    {
+        return $this->nonce;
+    }
+
+    public function getAccessToken(): ?string
+    {
+        return $this->access_token;
+    }
 }

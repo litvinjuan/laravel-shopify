@@ -2,6 +2,7 @@
 
 namespace Litvinjuan\LaravelShopify;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -115,7 +116,7 @@ class LaravelShopifyManager
 
     private function assertValidNonce(): void
     {
-        if ($this->callbackData['state'] != $this->getShop()->nonce) {
+        if ($this->callbackData['state'] != $this->getShop()->getNonce()) {
             throw ShopifyException::invalidCallbackNonce();
         }
     }
@@ -181,7 +182,7 @@ class LaravelShopifyManager
 
     private function generateAccessCode(): void
     {
-        $response = Http::post("https://{$this->getShop()->domain}/admin/oauth/access_token", [
+        $response = Http::post("https://{$this->getShop()->getDomain()}/admin/oauth/access_token", [
             'client_id' => config('laravel-shopify.api-key'),
             'client_secret' => $this->apiSecret(),
             'code' => $this->callbackData['code'],
@@ -198,8 +199,10 @@ class LaravelShopifyManager
 
     private function setAccessToken($accessToken): void
     {
-        $this->getShop()
-            ->forceFill([
+        /** @var Model|ShopContract $shop */
+        $shop = $this->getShop();
+
+        $shop->forceFill([
                 'access_token' => $accessToken,
             ])
             ->save();
@@ -220,7 +223,6 @@ class LaravelShopifyManager
     private function createShop(ShopifyOwner $owner, $domain, $nonce)
     {
         // Find the user's shop (including disconnected) or create a new one
-        /** @var ShopContract $shop */
         $shop = $owner
             ->shop()
             ->withoutGlobalScope(ConnectedShopScope::class)

@@ -3,8 +3,8 @@
 namespace litvinjuan\LaravelShopify\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use litvinjuan\LaravelShopify\LaravelShopifyServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {

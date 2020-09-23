@@ -13,4 +13,14 @@
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <UndefinedInterfaceMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Illuminate\Contracts\Foundation\Application::configurationIsCached" />
+                <referencedMethod name="Illuminate\Contracts\Foundation\Application::refresh" />
+                <referencedMethod name="Illuminate\Contracts\Foundation\Application::offsetGet" />
+            </errorLevel>
+        </UndefinedInterfaceMethod>
+    </issueHandlers>
 </psalm>

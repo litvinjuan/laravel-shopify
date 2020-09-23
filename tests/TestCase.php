@@ -1,9 +1,9 @@
 <?php
 
-namespace litvinjuan\LaravelShopify\Tests;
+namespace Litvinjuan\LaravelShopify\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use litvinjuan\LaravelShopify\LaravelShopifyServiceProvider;
+use Litvinjuan\LaravelShopify\LaravelShopifyServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'litvinjuan\\LaravelShopify\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Litvinjuan\\LaravelShopify\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

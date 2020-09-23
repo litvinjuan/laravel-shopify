@@ -17,7 +17,10 @@
     ],
     "require": {
         "php": "^7.4",
-        "illuminate/contracts": "^8.0"
+        "illuminate/database": "^8.0",
+        "illuminate/support": "^8.0",
+        "illuminate/http": "^8.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
@@ -27,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "litvinjuan\\LaravelShopify\\": "src",
-            "litvinjuan\\LaravelShopify\\Database\\Factories\\": "database/factories"
+            "Litvinjuan\\LaravelShopify\\": "src",
+            "Litvinjuan\\LaravelShopify\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "litvinjuan\\LaravelShopify\\Tests\\": "tests"
+            "Litvinjuan\\LaravelShopify\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -48,10 +51,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "litvinjuan\\LaravelShopify\\LaravelShopifyServiceProvider"
+                "Litvinjuan\\LaravelShopify\\LaravelShopifyServiceProvider"
             ],
             "aliases": {
-                "LaravelShopify": "litvinjuan\\LaravelShopify\\LaravelShopifyFacade"
+                "Shopify": "Litvinjuan\\LaravelShopify\\Facades\\Shopify"
             }
         }
     },

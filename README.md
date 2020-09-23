@@ -18,13 +18,13 @@ composer require litvinjuan/laravel-shopify
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --provider="litvinjuan\LaravelShopify\LaravelShopifyServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Litvinjuan\LaravelShopify\LaravelShopifyServiceProvider" --tag="migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="litvinjuan\LaravelShopify\LaravelShopifyServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Litvinjuan\LaravelShopify\LaravelShopifyServiceProvider" --tag="config"
 ```
 
 This is the contents of the published config file:

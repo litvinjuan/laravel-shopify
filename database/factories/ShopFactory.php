@@ -4,11 +4,13 @@ namespace Litvinjuan\LaravelShopify\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Litvinjuan\LaravelShopify\Models\Shop;
 
 class ShopFactory extends Factory
 {
-    protected $model = Shop::class;
+    public function modelName()
+    {
+        return config('laravel-shopify.shop-model');
+    }
 
     public function definition()
     {

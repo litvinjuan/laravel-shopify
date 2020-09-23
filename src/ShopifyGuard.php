@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Litvinjuan\LaravelShopify\Facades\Shopify;
-use Litvinjuan\LaravelShopify\Models\Shop;
 use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
 
 class ShopifyGuard implements Guard
@@ -52,7 +51,7 @@ class ShopifyGuard implements Guard
 
     private function getShop()
     {
-        $shopQuery = Shop::query()->domain($this->request->get('shop'));
+        $shopQuery = config('laravel-shopify.shop-model')::query()->domain($this->request->get('shop'));
 
         if (request()->routeIs('shopify.callback')) {
             $shopQuery->withoutGlobalScope(ConnectedShopScope::class);

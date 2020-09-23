@@ -3,18 +3,18 @@
 namespace Litvinjuan\LaravelShopify\Traits;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Litvinjuan\LaravelShopify\Models\Shop;
+use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 
 /**
  * Trait HasShop
  * @package App\Models\Traits
  *
- * @property Shop $shop
+ * @property ShopContract $shop
  */
 trait HasShop
 {
     public function shop(): HasOne
     {
-        return $this->hasOne(Shop::class);
+        return $this->hasOne(config('laravel-shopify.shop-model'));
     }
 }

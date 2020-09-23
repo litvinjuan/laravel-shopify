@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
+use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 use Litvinjuan\LaravelShopify\Contracts\ShopifyOwner;
 use Litvinjuan\LaravelShopify\Exceptions\ShopifyException;
-use Litvinjuan\LaravelShopify\Models\Shop;
 use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
 
 class LaravelShopifyManager
 {
     const PARAMETERS = ['state', 'shop', 'hmac', 'code', 'timestamp'];
 
-    /** @var Shop */
+    /** @var ShopContract */
     private $shop;
 
     /** @var array */
@@ -34,7 +34,7 @@ class LaravelShopifyManager
         return Redirect::to($url);
     }
 
-    public function callback(ShopifyOwner $owner, Request $request): ?Shop
+    public function callback(ShopifyOwner $owner, Request $request): ?ShopContract
     {
         $this->assertValidHmac();
 
@@ -64,7 +64,7 @@ class LaravelShopifyManager
         return ! is_null($this->shop);
     }
 
-    public function getShop(): ?Shop
+    public function getShop(): ?ShopContract
     {
         return $this->shop;
     }
@@ -72,7 +72,7 @@ class LaravelShopifyManager
     public function setShop($shop): void
     {
         if (is_string($shop)) {
-            $shop = Shop::query()->domain($shop)->firstOrFail();
+            $shop = $this->getShopClass()::query()->domain($shop)->firstOrFail();
         }
 
         $this->shop = $shop;
@@ -81,7 +81,7 @@ class LaravelShopifyManager
     private function assertDomainNotTaken(ShopifyOwner $owner, $domain): void
     {
         // Check the shop isn't owned by another user
-        $shopWithSameDomain = Shop::query()
+        $shopWithSameDomain = $this->getShopClass()::query()
             ->where('user_id', '!=', $owner->getKey())
             ->withoutGlobalScope(ConnectedShopScope::class)
             ->domain($domain);
@@ -93,7 +93,7 @@ class LaravelShopifyManager
 
     public function assertShopExists($domain): void
     {
-        $shopQuery = Shop::query()
+        $shopQuery = $this->getShopClass()::query()
             ->withoutGlobalScope(ConnectedShopScope::class)
             ->domain($domain);
 
@@ -153,8 +153,8 @@ class LaravelShopifyManager
         }
 
         return
-            hash_equals(request()->header('x-shopify-hmac-sha256'), $this->webhookHmac(config('laravel-shopify.webhook-secret'))) ||
-            hash_equals(request()->header('x-shopify-hmac-sha256'), $this->webhookHmac(config('laravel-shopify.api-secret')));
+            hash_equals(request()->header('x-shopify-hmac-sha256'), $this->webhookHmac($this->webhookSecret())) ||
+            hash_equals(request()->header('x-shopify-hmac-sha256'), $this->webhookHmac($this->apiSecret()));
     }
 
     private function requestHmac(): string
@@ -169,7 +169,7 @@ class LaravelShopifyManager
         $filtered = http_build_query($parameters);
 
         // Build signature from the filtered query string using the api secret as the signature
-        return hash_hmac('sha256', $filtered, config('laravel-shopify.api-secret'));
+        return hash_hmac('sha256', $filtered, $this->apiSecret());
     }
 
     private function webhookHmac($secret): string
@@ -183,7 +183,7 @@ class LaravelShopifyManager
     {
         $response = Http::post("https://{$this->getShop()->domain}/admin/oauth/access_token", [
             'client_id' => config('laravel-shopify.api-key'),
-            'client_secret' => config('laravel-shopify.api-secret'),
+            'client_secret' => $this->apiSecret(),
             'code' => $this->callbackData['code'],
         ]);
 
@@ -220,7 +220,7 @@ class LaravelShopifyManager
     private function createShop(ShopifyOwner $owner, $domain, $nonce)
     {
         // Find the user's shop (including disconnected) or create a new one
-        /** @var Shop $shop */
+        /** @var ShopContract $shop */
         $shop = $owner
             ->shop()
             ->withoutGlobalScope(ConnectedShopScope::class)
@@ -232,5 +232,20 @@ class LaravelShopifyManager
             'domain' => $domain,
             'access_token' => null,
         ])->save();
+    }
+
+    private function getShopClass()
+    {
+        return config('laravel-shopify.shop-model');
+    }
+
+    private function webhookSecret()
+    {
+        return config('laravel-shopify.webhook-secret');
+    }
+
+    private function apiSecret()
+    {
+        return config('laravel-shopify.api-secret');
     }
 }

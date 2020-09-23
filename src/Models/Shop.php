@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 use Litvinjuan\LaravelShopify\Database\Factories\ShopFactory;
 use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
 
@@ -21,10 +22,10 @@ use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
  * @property string $domain
  * @property string $nonce
  * @property string|null $access_token
- * @property-read int|null $products_count
+ * @method static Builder|Shop domain($domain)
  * @method static Builder|Shop connected()
  */
-class Shop extends Model
+class Shop extends Model implements ShopContract
 {
     use HasFactory;
 

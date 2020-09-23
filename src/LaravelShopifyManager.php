@@ -17,7 +17,6 @@ class LaravelShopifyManager
 {
     const PARAMETERS = ['state', 'shop', 'hmac', 'code', 'timestamp'];
 
-    /** @var ShopContract */
     private $shop;
 
     /** @var array */
@@ -116,7 +115,7 @@ class LaravelShopifyManager
 
     private function assertValidNonce(): void
     {
-        if ($this->callbackData['state'] != $this->getShop()->getNonce()) {
+        if ($this->callbackData['state'] != $this->shop->nonce) {
             throw ShopifyException::invalidCallbackNonce();
         }
     }
@@ -182,7 +181,7 @@ class LaravelShopifyManager
 
     private function generateAccessCode(): void
     {
-        $response = Http::post("https://{$this->getShop()->getDomain()}/admin/oauth/access_token", [
+        $response = Http::post("https://{$this->shop->domain}/admin/oauth/access_token", [
             'client_id' => config('laravel-shopify.api-key'),
             'client_secret' => $this->apiSecret(),
             'code' => $this->callbackData['code'],

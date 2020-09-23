@@ -33,7 +33,7 @@ class ShopifyGuard implements Guard
 
         if ($shop = $this->getShop()) {
             Shopify::setShop($shop);
-            $this->user = Shopify::getShop()->getUser();
+            $this->user = $shop->user;
         }
 
         return $this->user;

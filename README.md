@@ -160,6 +160,15 @@ public function callback(Request $request)
 }
 ```
 
+To interact with the Shopify Api, simply call the api() method in the shop you want to use, and hit the endpoint you want to use
+``` php
+$response = $shop->api()->get("/admin/api/2020-07/products.json");
+$response = $shop->api()->post("/admin/api/2020-07/webhooks.json", [ /* ... payload ... */ ]);
+$response = $shop->api()->put(...);
+$response = $shop->api()->delete(...);
+// ...
+```
+
 ### Shopify Facade
 
 The package makes a Shopify Facade available that has a few useful methods.

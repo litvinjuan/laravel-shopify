@@ -109,7 +109,7 @@ Lastly, you'll need to create an App in your Shopify Developer account, and set 
 `SHOPIFY_API_KEY=` This is your app's api key. You can find it in your app dashboard  
 `SHOPIFY_API_SECRET=` This is your app's api secret. You can find it in your app dashboard  
 `SHOPIFY_API_SCOPES=` If no scopes are provided during an authentication request, shopify will use these.  
-`SHOPIFY_API_REDIRECT=` Callback url to use after the user has installed the app on shopify. Remember to whitelist this URL in your app dashboard.  
+`SHOPIFY_API_CALLBACK_URL=` Callback url to use after the user has installed the app on shopify. Remember to whitelist this URL in your app dashboard.  
 
 ## Usage
 
@@ -126,6 +126,7 @@ Route::get('/shopify/app', 'ShopifyController@app')->middleware(['auth:shopify']
 ```
 
 ### Authentication
+
 To authenticate your users in Shopify, you'll need to add two routes: one to redirect the user to Shopify's Oauth screen, and one for the callback from that screen:
 ``` php
 Route::get('/redirect', 'ShopifyController@redirect');

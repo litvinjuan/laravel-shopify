@@ -12,7 +12,7 @@ use Litvinjuan\LaravelShopify\LaravelShopifyManager;
 /**
  * @method static void setShop($shop)
  * @method static ShopContract|null getShop()
- * @method static RedirectResponse redirect(ShopifyOwner $owner, $domain, $redirect = null, $scopes = null)
+ * @method static RedirectResponse redirect(ShopifyOwner $owner, $domain, $callbackUrl = null, $scopes = null)
  * @method static ShopContract callback(ShopifyOwner $owner, Request $request)
  * @method static void forget()
  * @method static bool hasShop()

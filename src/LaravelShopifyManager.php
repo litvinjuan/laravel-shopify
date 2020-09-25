@@ -23,12 +23,12 @@ class LaravelShopifyManager
     /** @var array */
     private $callbackData;
 
-    public function redirect(ShopifyOwner $owner, $domain, $redirect = null, $scopes = null): RedirectResponse
+    public function redirect(ShopifyOwner $owner, $domain, $callbackUrl = null, $scopes = null): RedirectResponse
     {
         $this->assertDomainNotTaken($owner, $domain);
 
         $nonce = Str::random(64);
-        $url = $this->buildRedirectUrl($domain, $redirect, $scopes, $nonce);
+        $url = $this->buildRedirectUrl($domain, $callbackUrl, $scopes, $nonce);
 
         $this->createShop($owner, $domain, $nonce);
 
@@ -217,16 +217,20 @@ class LaravelShopifyManager
             ->save();
     }
 
-    private function buildRedirectUrl($shopDomain, $redirect, $scopes, $nonce): string
+    private function buildRedirectUrl($shopDomain, $callbackUrl, $scopes, $nonce): string
     {
         $apiKey = config('laravel-shopify.api-key');
-        $redirectUrl = $redirect ?? config('laravel-shopify.redirect-url');
+        $callbackUrl = $callbackUrl ?? config('laravel-shopify.callback-url');
 
         if (! $scopes) {
             $scopes = config('laravel-shopify.scopes');
         }
 
-        return "https://{$shopDomain}/admin/oauth/authorize?client_id={$apiKey}&scope={$scopes}&redirect_uri={$redirectUrl}&state={$nonce}";
+        if (is_array($scopes)) {
+            $scopes = implode(',', $scopes);
+        }
+
+        return "https://{$shopDomain}/admin/oauth/authorize?client_id={$apiKey}&scope={$scopes}&redirect_uri={$callbackUrl}&state={$nonce}";
     }
 
     private function createShop(ShopifyOwner $owner, $domain, $nonce)

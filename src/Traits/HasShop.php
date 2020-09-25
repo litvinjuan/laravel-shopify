@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 
 /**
- * Trait HasShop
- * @package App\Models\Traits
- *
  * @property ShopContract $shop
  */
 trait HasShop

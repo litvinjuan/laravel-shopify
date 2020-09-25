@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 use Litvinjuan\LaravelShopify\Contracts\ShopifyOwner;
+use Litvinjuan\LaravelShopify\Contracts\ShopLoader;
 use Litvinjuan\LaravelShopify\Exceptions\ShopifyException;
 use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
 
@@ -61,11 +62,20 @@ class LaravelShopifyManager
 
     public function hasShop(): bool
     {
-        return ! is_null($this->shop);
+        return ! is_null($this->getShop());
     }
 
     public function getShop(): ?ShopContract
     {
+        if (! $this->shop) {
+            /** @var ShopLoader $loader */
+            $loaderClass = config('laravel-shopify.shop-loader-class');
+            if ($loaderClass) {
+                $loader = new $loaderClass();
+                $this->shop = $loader->load();
+            }
+        }
+
         return $this->shop;
     }
 
@@ -115,7 +125,7 @@ class LaravelShopifyManager
 
     private function assertValidNonce(): void
     {
-        if ($this->callbackData['state'] != $this->shop->nonce) {
+        if ($this->callbackData['state'] != $this->getShop()->nonce) {
             throw ShopifyException::invalidCallbackNonce();
         }
     }
@@ -181,7 +191,7 @@ class LaravelShopifyManager
 
     private function generateAccessCode(): void
     {
-        $response = Http::post("https://{$this->shop->domain}/admin/oauth/access_token", [
+        $response = Http::post("https://{$this->getShop()->domain}/admin/oauth/access_token", [
             'client_id' => config('laravel-shopify.api-key'),
             'client_secret' => $this->apiSecret(),
             'code' => $this->callbackData['code'],

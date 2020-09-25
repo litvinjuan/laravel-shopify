@@ -7,9 +7,6 @@ use Illuminate\Support\Collection;
 use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 
 /**
- * Trait HasShop
- * @package App\Models\Traits
- *
  * @property ShopContract[]|Collection $shops
  */
 trait HasShops

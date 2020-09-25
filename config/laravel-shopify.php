@@ -7,5 +7,6 @@ return [
     'scopes' => env('SHOPIFY_API_SCOPES', 'read_products'),
     'redirect-url' => env('SHOPIFY_API_REDIRECT', 'http://localhost/shopify/callback'),
     'user-model' => App\Models\User::class,
-    'shop-model' => App\Models\Shop::class,
+    'shop-model' => Litvinjuan\LaravelShopify\Models\Shop::class,
+    'shop-loader-class' => App\Utils\ShopLoader::class,
 ];

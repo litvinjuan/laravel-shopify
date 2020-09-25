@@ -7,4 +7,6 @@ use Illuminate\Http\Client\PendingRequest;
 interface ShopContract
 {
     public function api(): PendingRequest;
+
+    public function user();
 }

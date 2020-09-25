@@ -2,8 +2,10 @@
 
 namespace Litvinjuan\LaravelShopify;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
+use Litvinjuan\LaravelShopify\Middlewares\ValidateShopifySignature;
 
 class LaravelShopifyServiceProvider extends ServiceProvider
 {
@@ -37,6 +39,7 @@ class LaravelShopifyServiceProvider extends ServiceProvider
         }
 
         $this->configureGuard();
+        $this->configureMiddleware();
     }
 
     public function configureGuard()
@@ -65,5 +68,13 @@ class LaravelShopifyServiceProvider extends ServiceProvider
         }
 
         return false;
+    }
+
+    protected function configureMiddleware()
+    {
+        /** @var Router $router */
+        $router = $this->app->make(Router::class);
+
+        $router->aliasMiddleware('signed.shopify', ValidateShopifySignature::class);
     }
 }

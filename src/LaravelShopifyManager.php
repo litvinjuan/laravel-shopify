@@ -153,6 +153,10 @@ class LaravelShopifyManager
 
     private function validateRequestHmac(): bool
     {
+        if (! request()->has('hmac')) {
+            return false;
+        }
+
         return hash_equals(request()->get('hmac'), $this->requestHmac());
     }
 

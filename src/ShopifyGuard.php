@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Litvinjuan\LaravelShopify\Facades\Shopify;
-use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
 
 class ShopifyGuard implements Guard
 {

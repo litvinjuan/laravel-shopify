@@ -28,7 +28,7 @@ class ShopifyGuard implements Guard
         }
 
         if (! Shopify::isValidHmac()) {
-            return abort(403);
+            return null;
         }
 
         if ($shop = $this->getShop()) {
@@ -52,10 +52,6 @@ class ShopifyGuard implements Guard
     private function getShop()
     {
         $shopQuery = $this->getShopClass()::query()->domain($this->request->get('shop'));
-
-        if (request()->routeIs('shopify.callback')) {
-            $shopQuery->withoutGlobalScope(ConnectedShopScope::class);
-        }
 
         return $shopQuery->first();
     }

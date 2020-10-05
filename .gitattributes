@@ -10,5 +10,5 @@
 /.editorconfig      export-ignore
 /.php_cs.dist       export-ignore
 /.github            export-ignore
-/psalm.xml          export-ignore
+/phpstan.neon       export-ignore
 

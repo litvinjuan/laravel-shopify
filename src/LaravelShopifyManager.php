@@ -12,6 +12,7 @@ use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 use Litvinjuan\LaravelShopify\Contracts\ShopifyOwner;
 use Litvinjuan\LaravelShopify\Contracts\ShopLoader;
 use Litvinjuan\LaravelShopify\Exceptions\ShopifyException;
+use Litvinjuan\LaravelShopify\Models\Shop;
 
 class LaravelShopifyManager
 {
@@ -92,7 +93,6 @@ class LaravelShopifyManager
         // Check the shop isn't owned by another user
         $shopWithSameDomain = $this->getShopClass()::query()
             ->where('user_id', '!=', $owner->getKey())
-//            ->withoutGlobalScope(ConnectedShopScope::class)
             ->domain($domain);
 
         if ($shopWithSameDomain->exists()) {
@@ -102,9 +102,7 @@ class LaravelShopifyManager
 
     public function assertShopExists($domain): void
     {
-        $shopQuery = $this->getShopClass()::query()
-//            ->withoutGlobalScope(ConnectedShopScope::class)
-            ->domain($domain);
+        $shopQuery = $this->getShopClass()::query()->domain($domain);
 
         if ($shopQuery->doesntExist()) {
             throw ShopifyException::shopNotFound($domain);
@@ -113,10 +111,11 @@ class LaravelShopifyManager
 
     private function loadCallbackShop(ShopifyOwner $owner): void
     {
+        /** @var Shop $shop */
         $shop = $owner
             ->shop()
+            ->orWhereNull('access_token')
             ->domain($this->callbackData['shop'])
-//            ->withoutGlobalScope(ConnectedShopScope::class)
             ->first();
 
         $this->setShop($shop);
@@ -124,7 +123,7 @@ class LaravelShopifyManager
 
     private function assertValidNonce(): void
     {
-        if ($this->callbackData['state'] != $this->getShop()->nonce) {
+        if ($this->callbackData['state'] != optional($this->getShop())->nonce) {
             throw ShopifyException::invalidCallbackNonce();
         }
     }
@@ -214,10 +213,11 @@ class LaravelShopifyManager
         /** @var Model|ShopContract $shop */
         $shop = $this->getShop();
 
-        $shop->forceFill([
+        if ($shop) {
+            $shop->forceFill([
                 'access_token' => $accessToken,
-            ])
-            ->save();
+            ])->save();
+        }
     }
 
     private function buildRedirectUrl($shopDomain, $callbackUrl, $scopes, $nonce): string
@@ -241,7 +241,7 @@ class LaravelShopifyManager
         // Find the user's shop (including disconnected) or create a new one
         $shop = $owner
             ->shop()
-//            ->withoutGlobalScope(ConnectedShopScope::class)
+            ->orWhereNull('access_token')
             ->firstOrNew();
 
         // Set shop's nonce and domain, clear old access token if any

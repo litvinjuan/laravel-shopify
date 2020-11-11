@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Litvinjuan\LaravelShopify\Contracts\ShopContract;
-use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
 
 /**
  * @property int $id
@@ -21,11 +20,6 @@ use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
  */
 trait ShopTrait
 {
-    protected static function bootShopTrait()
-    {
-        static::addGlobalScope(new ConnectedShopScope);
-    }
-
     public function getFillable()
     {
         return array_merge([

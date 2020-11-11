@@ -50,7 +50,7 @@ class ShopifyGuard implements Guard
 
     private function getShop()
     {
-        $shopQuery = $this->getShopClass()::query()->domain($this->request->get('shop'));
+        $shopQuery = $this->getShopClass()::query()->domain($this->request->get('shop'))->connected();
 
         return $shopQuery->first();
     }

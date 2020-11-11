@@ -12,7 +12,6 @@ use Litvinjuan\LaravelShopify\Contracts\ShopContract;
 use Litvinjuan\LaravelShopify\Contracts\ShopifyOwner;
 use Litvinjuan\LaravelShopify\Contracts\ShopLoader;
 use Litvinjuan\LaravelShopify\Exceptions\ShopifyException;
-use Litvinjuan\LaravelShopify\Scopes\ConnectedShopScope;
 
 class LaravelShopifyManager
 {
@@ -82,7 +81,7 @@ class LaravelShopifyManager
     public function setShop($shop): void
     {
         if (is_string($shop)) {
-            $shop = $this->getShopClass()::query()->domain($shop)->firstOrFail();
+            $shop = $this->getShopClass()::query()->domain($shop)->connected()->firstOrFail();
         }
 
         $this->shop = $shop;
@@ -93,7 +92,7 @@ class LaravelShopifyManager
         // Check the shop isn't owned by another user
         $shopWithSameDomain = $this->getShopClass()::query()
             ->where('user_id', '!=', $owner->getKey())
-            ->withoutGlobalScope(ConnectedShopScope::class)
+//            ->withoutGlobalScope(ConnectedShopScope::class)
             ->domain($domain);
 
         if ($shopWithSameDomain->exists()) {
@@ -104,7 +103,7 @@ class LaravelShopifyManager
     public function assertShopExists($domain): void
     {
         $shopQuery = $this->getShopClass()::query()
-            ->withoutGlobalScope(ConnectedShopScope::class)
+//            ->withoutGlobalScope(ConnectedShopScope::class)
             ->domain($domain);
 
         if ($shopQuery->doesntExist()) {
@@ -117,7 +116,7 @@ class LaravelShopifyManager
         $shop = $owner
             ->shop()
             ->domain($this->callbackData['shop'])
-            ->withoutGlobalScope(ConnectedShopScope::class)
+//            ->withoutGlobalScope(ConnectedShopScope::class)
             ->first();
 
         $this->setShop($shop);
@@ -242,7 +241,7 @@ class LaravelShopifyManager
         // Find the user's shop (including disconnected) or create a new one
         $shop = $owner
             ->shop()
-            ->withoutGlobalScope(ConnectedShopScope::class)
+//            ->withoutGlobalScope(ConnectedShopScope::class)
             ->firstOrNew();
 
         // Set shop's nonce and domain, clear old access token if any

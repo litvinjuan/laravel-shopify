@@ -52,4 +52,14 @@ trait ShopTrait
                 'X-Shopify-Access-Token' => $this->access_token,
             ]);
     }
+
+    public function scopeWithDisconnected(Builder $query)
+    {
+
+    }
+
+    public function scopeOnlyDisconnected(Builder $query)
+    {
+        $query->whereNull('access_token');
+    }
 }

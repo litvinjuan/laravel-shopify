@@ -102,7 +102,7 @@ class LaravelShopifyManager
 
     public function assertShopExists($domain): void
     {
-        $shopQuery = $this->getShopClass()::query()->domain($domain);
+        $shopQuery = $this->getShopClass()::query()->onlyDisconnected()->domain($domain);
 
         if ($shopQuery->doesntExist()) {
             throw ShopifyException::shopNotFound($domain);
@@ -114,7 +114,7 @@ class LaravelShopifyManager
         /** @var Shop $shop */
         $shop = $owner
             ->shop()
-            ->orWhereNull('access_token')
+            ->onlyDisconnected()
             ->domain($this->callbackData['shop'])
             ->first();
 

@@ -241,7 +241,7 @@ class LaravelShopifyManager
         // Find the user's shop (including disconnected) or create a new one
         $shop = $owner
             ->shop()
-            ->orWhereNull('access_token')
+            ->withDisconnected()
             ->firstOrNew();
 
         // Set shop's nonce and domain, clear old access token if any
